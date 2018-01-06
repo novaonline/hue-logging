@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HueLogging.Web.Models;
+using Hangfire;
 
 namespace HueLogging.Web.Controllers
 {
@@ -25,8 +26,8 @@ namespace HueLogging.Web.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
-            return View();
+			RecurringJob.AddOrUpdate(() => Console.WriteLine("Minute Job"), Cron.Minutely);
+			return View();
         }
 
         public IActionResult Error()

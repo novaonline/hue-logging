@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>HueLogging.Web</Authors>
+    <Company>HueLogging.Web</Company>
+    <Product>HueLogging.Web</Product>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HangFire" Version="1.6.17" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
   </ItemGroup>
 
