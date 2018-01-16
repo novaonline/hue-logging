@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HueLogging.DAL\HueLogging.DAL.csproj" />
     <ProjectReference Include="..\HueLogging.Models\HueLogging.Models.csproj" />
   </ItemGroup>
 

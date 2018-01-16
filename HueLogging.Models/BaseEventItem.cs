@@ -2,7 +2,7 @@
 
 namespace HueLogging.Models
 {
-    public class Class1
+    public class BaseEventItem
     {
     }
 }
