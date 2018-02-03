@@ -10,10 +10,17 @@
   <ItemGroup>
     <PackageReference Include="HangFire" Version="1.6.17" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HueLogging.DAL\HueLogging.DAL.csproj" />
+    <ProjectReference Include="..\HueLogging.Library\HueLogging.Library.csproj" />
+    <ProjectReference Include="..\HueLogging.Models\HueLogging.Models.csproj" />
   </ItemGroup>
 
 </Project>

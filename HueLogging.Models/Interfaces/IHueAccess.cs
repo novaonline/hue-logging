@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace HueLogging.Models.Interfaces
+{
+	/// <summary>
+	/// This should never write to the Hue. Any Activities done here is ignored when logging.
+	/// </summary>
+	public interface IHueAccess
+    {
+		/// <summary>
+		/// Setting up anything needed before accessing.
+		/// </summary>
+		void Setup();
+
+		/// <summary>
+		/// to determine if hue has been active since the date specified (UTC).
+		/// </summary>
+		/// <param name="dateTime"></param>
+		/// <returns></returns>
+		bool HasBeenActiveSince(DateTime dateTime);
+
+		/// <summary>
+		/// get all the current light information.
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<LightEvent> GetLights();
+
+		/// <summary>
+		/// get the current light by Id
+		/// </summary>
+		/// <returns></returns>
+		LightEvent GetLight(string id);
+	}
+}

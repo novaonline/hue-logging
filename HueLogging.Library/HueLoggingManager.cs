@@ -1,8 +1,8 @@
 ﻿using System;
-using HueLogging.DAL.Api;
-using HueLogging.DAL.Repository;
 using HueLogging.Library.Helpers.Comparers;
 using HueLogging.Models;
+using HueLogging.Models.Interfaces;
+using System.Threading.Tasks;
 
 namespace HueLogging.Library
 {
@@ -20,7 +20,7 @@ namespace HueLogging.Library
 		public bool HasPassedPreCondition()
 		{
 			var lastLightEvent = _hueLoggingRepo.GetLastEvent();
-			return lastLightEvent != null ? _hueAccess.HasBeenActiveSince(lastLightEvent.AddDate) : false;
+			return lastLightEvent != null ? _hueAccess.HasBeenActiveSince(lastLightEvent.AddDate) : true;
 		}
 
 		public void LogEvent()
@@ -29,21 +29,19 @@ namespace HueLogging.Library
 			var lights = _hueAccess.GetLights();
 			foreach (var currentLight in lights)
 			{
-				var lastRecordedEvent = _hueLoggingRepo.GetLastEvent(currentLight.Id);
-				if (new ActivityComparer().Compare(lastRecordedEvent?.Light, currentLight) != 0)
+				var lastRecordedEvent = _hueLoggingRepo.GetLastEvent(currentLight.Light.Id);
+				if (new ActivityComparer().Compare(lastRecordedEvent, currentLight) != 0)
 				{
-					_hueLoggingRepo.Save(new LightEvent
-					{
-						Light = currentLight,
-						AddDate = DateTime.UtcNow
-					});
+					currentLight.AddDate = DateTime.UtcNow;
+					_hueLoggingRepo.Save(currentLight);
 				}
 			}
 		}
 
 		public void Start()
 		{
-			if (HasPassedPreCondition())
+			_hueAccess.Setup();
+			if(HasPassedPreCondition())
 			{
 				LogEvent();
 			}

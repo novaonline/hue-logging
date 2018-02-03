@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using HueLogging.Models.Interfaces;
+using HueLogging.Library;
+using HueLogging.DAL.Api;
+using HueLogging.DAL.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace HueLogging.Web
 {
@@ -22,7 +27,13 @@ namespace HueLogging.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("HangFireDBConnection")));
+			services.AddTransient<ILoggingManager, HueLoggingManager>();
+			services.AddTransient<IHueAccess, Q42HueAccess>();
+			services.AddTransient<IHueLoggingRepo, HueLogginRepo>();
+
+			services.AddDbContext<HueLoggingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HueLoggingConnection")));
+			services.AddHangfire(options => options.UseSqlServerStorage(Configuration.GetConnectionString("HangFireDBConnection")));
+
 			services.AddMvc();
         }
 

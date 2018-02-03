@@ -1,12 +1,17 @@
-﻿using HueLogging.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace HueLogging.DAL.Repository
+namespace HueLogging.Models.Interfaces
 {
-    public interface IHueLoggingRepo : IDisposable
-    {
+	public interface IHueLoggingRepo : IDisposable
+	{
+
+		/// <summary>
+		/// Get last Config
+		/// </summary>
+		/// <returns></returns>
+		HueConfigStates GetRecentConfig();
+
 		/// <summary>
 		/// Get all the events since a duration back
 		/// </summary>
@@ -14,11 +19,17 @@ namespace HueLogging.DAL.Repository
 		IEnumerable<LightEvent> GetRecentEvents(TimeSpan durationBack);
 
 		/// <summary>
+		/// Get the number of events
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<LightEvent> GetLastNumberOfEvents();
+
+		/// <summary>
 		/// Get the event by the Id
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		LightEvent GetEvent(uint id);
+		LightEvent GetEvent(int id);
 
 		/// <summary>
 		/// Get the last event recorded
@@ -31,7 +42,7 @@ namespace HueLogging.DAL.Repository
 		/// </summary>
 		/// <param name="lightId"></param>
 		/// <returns></returns>
-		LightEvent GetLastEvent(uint lightId);
+		LightEvent GetLastEvent(string lightId);
 
 		/// <summary>
 		/// Save a single light event
@@ -43,5 +54,11 @@ namespace HueLogging.DAL.Repository
 		/// </summary>
 		/// <param name="lightEvent"></param>
 		void Save(IEnumerable<LightEvent> lightEvent);
+
+		/// <summary>
+		/// Add Config Changes
+		/// </summary>
+		/// <param name="configStates"></param>
+		void Save(HueConfigStates configStates);
 	}
 }

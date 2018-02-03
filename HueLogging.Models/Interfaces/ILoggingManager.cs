@@ -1,11 +1,7 @@
-﻿using HueLogging.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HueLogging.Library
+﻿
+namespace HueLogging.Models.Interfaces
 {
-    interface ILoggingManager
+    public interface ILoggingManager
     {
 		/// <summary>
 		/// Begin
@@ -14,7 +10,6 @@ namespace HueLogging.Library
 
 		/// <summary>
 		/// If precondition has failed log event should not continue.
-		/// TODO: This one doesnt seem to make sense
 		/// </summary>
 		/// <returns></returns>
 		bool HasPassedPreCondition();
@@ -23,5 +18,5 @@ namespace HueLogging.Library
 		/// Log the event
 		/// </summary>
 		void LogEvent();
-    }
+	}
 }
