@@ -28,7 +28,7 @@ namespace HueLogging.Web
         public void ConfigureServices(IServiceCollection services)
         {
 			services.AddTransient<ILoggingManager, HueLoggingManager>();
-			services.AddTransient<IHueAccess, Q42HueAccess>();
+			services.AddScoped<IHueAccess, Q42HueAccess>();
 			services.AddTransient<IHueLoggingRepo, HueLogginRepo>();
 
 			services.AddDbContext<HueLoggingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HueLoggingConnection")));

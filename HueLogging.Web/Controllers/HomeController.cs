@@ -24,12 +24,14 @@ namespace HueLogging.Web.Controllers
 			return View();
 		}
 
+		[Route("/start")]
 		public IActionResult Start()
 		{
 			RecurringJob.AddOrUpdate("HueLoggingJobId", () => _loggingManager.Start(), Cron.Minutely, TimeZoneInfo.Utc, "HueLogging");
 			return View();
 		}
 
+		[Route("/stop")]
 		public IActionResult Stop()
 		{
 			RecurringJob.RemoveIfExists("HueLoggingJobId");
