@@ -19,7 +19,7 @@ namespace HueLogging.DAL.Repository
 
 		public HueConfigStates GetRecentConfig()
 		{
-			return _context.HueConfigStates.OrderByDescending(x => x.Id).LastOrDefault();
+			return _context.HueConfigStates.OrderByDescending(x => x.Id).FirstOrDefault();
 		}
 
 		public LightEvent GetEvent(int id)

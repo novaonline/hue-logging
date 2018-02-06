@@ -25,22 +25,41 @@ namespace HueLogging.DAL.Api
 			_hueLoggingRepo = hueLoggingRepo;
 		}
 
+		public string GetBridgeIpForSetup()
+		{
+			IEnumerable<Q42.HueApi.Models.Bridge.LocatedBridge> bridgeIPs = _locator.LocateBridgesAsync(TimeSpan.FromSeconds(5)).Result;
+			var ip = bridgeIPs.FirstOrDefault()?.IpAddress;
+			_client = new LocalHueClient(ip);
+			return ip;
+		}
+
+		public string GetAppKeyForSetup(string ip)
+		{
+			_client = new LocalHueClient(ip);
+			return _client.RegisterAsync(APP_NAME, DEVICE_NAME).Result;
+		}
+
+		public HueConfigStates PersistConfig(HueConfigStates configInput)
+		{
+			var config = new HueConfigStates { IpAddress = configInput.IpAddress, Key = configInput.Key, AddDate = DateTime.UtcNow };
+			_hueLoggingRepo.Save(config);
+			return config;
+		}
+
 		public void Setup()
 		{
-			int retries = 10;
+			int retries = HueSetupOptions.MaxAttempts;
 			var config = _hueLoggingRepo.GetRecentConfig();
 			if (config == null)
 			{
-				IEnumerable<Q42.HueApi.Models.Bridge.LocatedBridge> bridgeIPs = _locator.LocateBridgesAsync(TimeSpan.FromSeconds(5)).Result;
-				var ip = bridgeIPs.FirstOrDefault()?.IpAddress;
-				_client = new LocalHueClient(ip);
+				var ip = GetBridgeIpForSetup();
 				string appKey = String.Empty;
 				while (string.IsNullOrEmpty(appKey) && retries >= 0)
 				{
-					Task.Delay(1000).Wait();
+					Task.Delay(HueSetupOptions.WaitPeriodInMs).Wait();
 					try
 					{
-						appKey = _client.RegisterAsync(APP_NAME, DEVICE_NAME).Result;
+						appKey = GetAppKeyForSetup(ip);
 						retries--;
 					}
 					catch (Exception ex)
@@ -49,8 +68,11 @@ namespace HueLogging.DAL.Api
 					}
 
 				}
-				config = new HueConfigStates { IpAddress = ip, Key = appKey, AddDate = DateTime.UtcNow };
-				_hueLoggingRepo.Save(config);
+				config = PersistConfig(new HueConfigStates
+				{
+					IpAddress = ip,
+					Key = appKey
+				});
 			}
 			_client = new LocalHueClient(config.IpAddress, config.Key);
 		}

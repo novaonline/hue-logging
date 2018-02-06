@@ -1,0 +1,61 @@
+﻿@model HueLogging.Models.HueSetupOptions
+@{
+	ViewData["Title"] = "Setup";
+}
+<h2>Setup</h2>
+<div>
+	<h4>HueSetupOptions</h4>
+	@if (ViewData["Message"] != null)
+	{
+		<p>@ViewData["Message"]</p>
+
+	}
+	<hr />
+	<p id="ip-message">Finding Hue Bridge...</p>
+	<p id="auth-message"></p>
+	<p id="complete-message"></p>
+</div>
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+<script>
+	var authMsg = "Authenticating... Please Press Hue Bridge Button...";
+	var completeMsg = "Setup Complete!";
+	var interval = "";
+	var n = @HueLogging.Models.HueSetupOptions.MaxAttempts;
+	var key = null;
+	$(document).ready(function () {
+		$.post("FindBridgeIP", function (data) {
+			if (data) {
+				var prevText = $("#ip-message").text();
+				$("#ip-message").text(prevText + " Found (" + data.ip + ")!");
+				interval = setInterval(hueAuth.bind(this,data.ip),@HueLogging.Models.HueSetupOptions.WaitPeriodInMs);
+			}
+
+		});
+		function hueAuth(ip) {
+			if (key || n <= 0) {
+				clearInterval(interval);
+				if (key) {
+					$("#complete-message").text(completeMsg);
+				} else {
+					$("#complete-message").text("Timed out.").append($("<a></a>", {
+						href: "@Url.Action("Setup")",
+						text: " Please try again."
+					}));
+				}
+				return;
+			}
+			$.post("Authenticate", { ip: ip } ,function (data) {
+				key = data.appKey;
+				$("#auth-message").text(authMsg + "(" + n + " more tries) ");
+				if (data.redirect) {
+					window.location.href = "@Url.Action("Index")";
+				}
+			});
+			n--;
+		}
+	});
+</script>
+}
