@@ -104,5 +104,47 @@ namespace HueLogging.DAL.Repository
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
+		public HueSession GetLastIncompleteSession(string lightId)
+		{
+			return (from s in _context.HueSessions
+					where s.LightId == lightId && s.EndDate == null
+					orderby s.Id descending
+					select s).FirstOrDefault();
+		}
+
+		public IEnumerable<HueSession> GetHueSessions(DateTime startDate, DateTime endDate)
+		{
+			return (from s in _context.HueSessions
+					where startDate <= s.StartDate && s.StartDate <= endDate
+					&& s.EndDate.HasValue
+					select s)
+					.Include(x=>x.Light);
+		}
+
+		public void Save(HueSession hueSession)
+		{
+			if (hueSession.Id == 0)
+			{
+				_context.Add(hueSession);
+			}
+			else
+			{
+				_context.Update(hueSession);
+			}
+			_context.SaveChanges();
+		}
+
+		public IEnumerable<HueSessionSummary> GetHueSessionSummary(DateTime startDate, DateTime endDate)
+		{
+			return (from s in GetHueSessions(startDate, endDate)
+					orderby s.StartDate ascending
+					group s by s.Light into g
+					select new HueSessionSummary
+					{
+						Light = g.Key,
+						TotalDuration = new TimeSpan(g.Sum(x => (x.EndDate.Value - x.StartDate).Ticks))
+					});
+		}
 	}
 }

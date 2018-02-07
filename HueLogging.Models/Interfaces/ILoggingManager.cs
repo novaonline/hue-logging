@@ -6,7 +6,7 @@ namespace HueLogging.Models.Interfaces
 		/// <summary>
 		/// Begin
 		/// </summary>
-		void Start();
+		void Start(bool shouldStartNewSession);
 
 		/// <summary>
 		/// If precondition has failed log event should not continue.
@@ -17,6 +17,6 @@ namespace HueLogging.Models.Interfaces
 		/// <summary>
 		/// Log the event
 		/// </summary>
-		void LogEvent();
+		void LogEvent(bool shouldStartNewSession);
 	}
 }

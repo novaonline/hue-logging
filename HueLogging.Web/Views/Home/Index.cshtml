@@ -1,18 +1,47 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <div class="row">
-    <div class="col-md-3">
-        <h2>Getting Started</h2>
-        <ol>
+	<div class="col-md-3">
+		<h2>Getting Started</h2>
+		<ol>
 			@* TODO: https://github.com/novaonline/hue-logging/issues/1 *@
-            <li><a href="@Url.Action("Index", "Settings")">Connect to the Phillips Hue Bridge</a></li>
+			<li><a href="@Url.Action("Index", "Settings")">Connect to the Phillips Hue Bridge</a></li>
 			<li><a href="/start">Start the Logging System</a></li>
 			@* TODO: https://github.com/novaonline/hue-logging/issues/2 *@
 			<li><a href="/hangfire">Monitor the Logging System</a></li>
 			<li><a href="/">Analyze Usage</a></li>
-        </ol>
-    </div>
+		</ol>
+	</div>
 	@* TODO: https://github.com/novaonline/hue-logging/issues/3 *@
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<canvas id="hueUsageChart"></canvas>
+	</div>
+</div>
+@section Scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+	<script>
+		$(document).ready(function () {
+
+			$.post("@Url.Action("GetSummary")", function (data) {
+				for (var i in data.datasets) {
+					data.datasets[i].backgroundColor = dynamicColors();
+				}
+				var ctx = document.getElementById('hueUsageChart').getContext('2d');
+				var myDoughnutChart = new Chart(ctx, {
+					type: 'doughnut',
+					data: data
+				});
+			});
+		});
+		var dynamicColors = function () {
+			var r = Math.floor(Math.random() * 255);
+			var g = Math.floor(Math.random() * 255);
+			var b = Math.floor(Math.random() * 255);
+			return "rgb(" + r + "," + g + "," + b + ")";
+		}
+	</script>
+}
