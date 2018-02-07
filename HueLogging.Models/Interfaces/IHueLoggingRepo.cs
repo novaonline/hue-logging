@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace HueLogging.Models.Interfaces
 {
-	public interface IHueLoggingRepo : IDisposable
+	// TODO: Splitup the config
+	public interface IHueLoggingRepo : IHueSessionRepo, IDisposable
 	{
 
 		/// <summary>

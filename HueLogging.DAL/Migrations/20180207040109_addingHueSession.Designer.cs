@@ -11,9 +11,10 @@ using System;
 namespace HueLogging.DAL.Migrations
 {
     [DbContext(typeof(HueLoggingContext))]
-    partial class HueLoggingContextModelSnapshot : ModelSnapshot
+    [Migration("20180207040109_addingHueSession")]
+    partial class addingHueSession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
