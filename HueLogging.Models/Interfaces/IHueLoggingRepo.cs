@@ -16,8 +16,12 @@ namespace HueLogging.Models.Interfaces
 		/// <summary>
 		/// Get all the events since a duration back
 		/// </summary>
-		/// <returns></returns>
-		IEnumerable<LightEvent> GetRecentEvents(TimeSpan durationBack);
+		/// <param name="durationBack"></param>
+		/// <param name="lightId"></param>
+		/// <returns>Should be sorted by most recent at top</returns>
+		IEnumerable<LightEvent> GetRecentEvents(string lightId, TimeSpan durationBack);
+
+		Light GetLightByName(string lightName);
 
 		/// <summary>
 		/// Get the number of events
