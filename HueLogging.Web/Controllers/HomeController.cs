@@ -28,10 +28,10 @@ namespace HueLogging.Web.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult GetSummary()
+		public IActionResult GetSummary(int daysBack = 30)
 		{
 			var end = DateTime.UtcNow;
-			var start = end.AddDays(-30);
+			var start = end.AddDays(-1 * daysBack);
 			var m = _hueLoggingRepo.GetHueSessionSummary(start, end);
 			return Json(new
 			{

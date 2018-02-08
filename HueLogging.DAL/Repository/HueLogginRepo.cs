@@ -50,14 +50,13 @@ namespace HueLogging.DAL.Repository
 					.FirstOrDefault();
 		}
 
-		public IEnumerable<LightEvent> GetRecentEvents(TimeSpan durationBack)
+		public IEnumerable<LightEvent> GetRecentEvents(string lightId, TimeSpan durationBack)
 		{
-			return (from l in _context.LightEvent
-					where DateTime.UtcNow.Subtract(durationBack) < l.AddDate
+			return (from l in _context.LightEvent.Include(x => x.Light).Include(x => x.State)
+					where DateTime.UtcNow.Subtract(durationBack) < l.AddDate && l.Light.Id == lightId
 					orderby l.AddDate descending
-					select l)
-					.Include(x => x.Light)
-					.Include(x => x.State);
+					select l);
+		
 		}
 
 		public IEnumerable<LightEvent> GetLastNumberOfEvents()
@@ -145,6 +144,14 @@ namespace HueLogging.DAL.Repository
 						Light = g.Key,
 						TotalDuration = new TimeSpan(g.Sum(x => (x.EndDate.Value - x.StartDate).Ticks))
 					});
+		}
+
+		public Light GetLightByName(string lightName)
+		{
+			return (from x in _context.LightEvent.Include(y => y.Light)
+					where x.Light.Name == lightName
+					orderby x.Id descending
+					select x).FirstOrDefault()?.Light;
 		}
 	}
 }

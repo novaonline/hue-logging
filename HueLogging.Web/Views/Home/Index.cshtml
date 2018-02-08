@@ -24,18 +24,33 @@
 @section Scripts {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
 	<script>
+		var canvas = document.getElementById('hueUsageChart');
+		var myDoughnutChart;
 		$(document).ready(function () {
 
 			$.post("@Url.Action("GetSummary")", function (data) {
 				for (var i in data.datasets) {
 					data.datasets[i].backgroundColor = dynamicColors();
 				}
-				var ctx = document.getElementById('hueUsageChart').getContext('2d');
-				var myDoughnutChart = new Chart(ctx, {
+				var ctx = canvas.getContext('2d');
+				myDoughnutChart = new Chart(ctx, {
 					type: 'doughnut',
 					data: data
 				});
 			});
+			canvas.onclick = function (evt) {
+				var activePoints = myDoughnutChart.getElementsAtEvent(evt);
+				if (activePoints[0]) {
+					var chartData = activePoints[0]['_chart'].config.data;
+					var idx = activePoints[0]['_index'];
+
+					var label = chartData.labels[idx];
+					var value = chartData.datasets[0].data[idx];
+
+					var url = "/focuson?lightName=" + label;
+					window.location.href = url;
+				}
+			};
 		});
 		var dynamicColors = function () {
 			var r = Math.floor(Math.random() * 255);
@@ -43,5 +58,6 @@
 			var b = Math.floor(Math.random() * 255);
 			return "rgb(" + r + "," + g + "," + b + ")";
 		}
+
 	</script>
 }
