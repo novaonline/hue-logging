@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HueLogging.DAL\HueLogging.DAL.csproj" />
-    <ProjectReference Include="..\HueLogging.Library\HueLogging.Library.csproj" />
-    <ProjectReference Include="..\HueLogging.Models\HueLogging.Models.csproj" />
+    <ProjectReference Include="..\HueLogging.Standard.Core\HueLogging.Standard.Library.csproj" />
+    <ProjectReference Include="..\HueLogging.Standard.DAL\HueLogging.Standard.DAL.csproj" />
+    <ProjectReference Include="..\HueLogging.Standard.Models\HueLogging.Standard.Models.csproj" />
   </ItemGroup>
 
 </Project>

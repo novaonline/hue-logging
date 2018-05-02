@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HueLogging.Standard.Models;
+using HueLogging.Standard.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using HueLogging.Models.Interfaces;
-using HueLogging.Models;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace HueLogging.Web.Controllers
 {
@@ -12,11 +10,13 @@ namespace HueLogging.Web.Controllers
 	{
 		private IHueLoggingRepo _hueLoggingRepo;
 		private IHueAccess _hueAccess;
+		private ILogger _logger;
 
-		public SettingsController(IHueLoggingRepo hueLoggingRepo, IHueAccess hueAccess)
+		public SettingsController(IHueLoggingRepo hueLoggingRepo, IHueAccess hueAccess, ILogger<SettingsController> logger)
 		{
 			_hueLoggingRepo = hueLoggingRepo;
 			_hueAccess = hueAccess;
+			_logger = logger;
 		}
 
 		public IActionResult Index()
@@ -62,7 +62,7 @@ namespace HueLogging.Web.Controllers
 			}
 			catch (Exception ex)
 			{
-				// was not authenticated
+				_logger.LogWarning(ex, "Did not Authenticate");
 			}
 			return Json(new { redirect = false, appKey = appKey });
 		}

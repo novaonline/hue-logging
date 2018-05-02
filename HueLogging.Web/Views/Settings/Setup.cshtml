@@ -2,35 +2,63 @@
 @{
 	ViewData["Title"] = "Setup";
 }
-<h2>Setup</h2>
-<div>
-	<h4>HueSetupOptions</h4>
-	@if (ViewData["Message"] != null)
-	{
-		<p>@ViewData["Message"]</p>
-
-	}
-	<hr />
-	<p id="ip-message">Finding Hue Bridge...</p>
-	<p id="auth-message"></p>
-	<p id="complete-message"></p>
+@if (ViewData["Message"] != null)
+{
+	<div class="alert alert-info alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong>Heads up!</strong> @ViewData["Message"]
+	</div>
+}
+<hr />
+<div class="row">
+	<div class="col-xs-12">
+		<div id="setupPanel" class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Setting up</h3>
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item hidden-at-start ip-message">Finding Hue Bridge...</li>
+				<li class="list-group-item hidden-at-start ip-message2">Found Bridge! IP: </li>
+				<li class="list-group-item hidden-at-start get-ready-message">Get ready to push the hue button...</li>
+			</ul>
+			<div class="panel-body auth-body hidden-at-start">
+				<p>Push the Button!</p>
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+						<span class="sr-only">100% remaining</span>
+					</div>
+				</div>
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item hidden-at-start time-out-message">Timed out. <a asp-action="Setup">Try again</a></li>
+			</ul>
+		</div>
+	</div>
 </div>
-<div>
-	<a asp-action="Index">Back to List</a>
+<div class="row">
+	<div class="col-xs-12">
+		<a asp-action="Index">Back to List</a>
+	</div>
 </div>
 @section Scripts {
-<script>
+	<script>
 	var authMsg = "Authenticating... Please Press Hue Bridge Button...";
 	var completeMsg = "Setup Complete!";
 	var interval = "";
 	var n = @HueLogging.Models.HueSetupOptions.MaxAttempts;
 	var key = null;
-	$(document).ready(function () {
+		$(document).ready(function () {
+			var setupPanel = $('#setupPanel');
+			setupPanel.children(".ip-message").show();
 		$.post("FindBridgeIP", function (data) {
 			if (data) {
-				var prevText = $("#ip-message").text();
-				$("#ip-message").text(prevText + " Found (" + data.ip + ")!");
-				interval = setInterval(hueAuth.bind(this,data.ip),@HueLogging.Models.HueSetupOptions.WaitPeriodInMs);
+				var txt = setupPanel.children('.ip-message2').text() + data.ip;
+				setupPanel.children('.ip-message2').text(txt).show();
+				setupPanel.children('.get-ready-message').show();
+				setTimeout((function () {
+					setupPanel.children('.auth-body');
+					interval = setInterval(hueAuth.bind(this, data.ip),@HueLogging.Models.HueSetupOptions.WaitPeriodInMs);
+				}).bind(this), 1000);
 			}
 
 		});
@@ -38,24 +66,26 @@
 			if (key || n <= 0) {
 				clearInterval(interval);
 				if (key) {
-					$("#complete-message").text(completeMsg);
+					$('#setupPanel').addClass('panel-success').removeClass('panel-default');
 				} else {
-					$("#complete-message").text("Timed out.").append($("<a></a>", {
-						href: "@Url.Action("Setup")",
-						text: " Please try again."
-					}));
+					$('#setupPanel').addClass('panel-danger').removeClass('panel-default');
+					$('#setupPanel').children('.time-out-message').show();
 				}
 				return;
 			}
 			$.post("Authenticate", { ip: ip } ,function (data) {
 				key = data.appKey;
-				$("#auth-message").text(authMsg + "(" + n + " more tries) ");
+				var percentVal = (n / @(HueLogging.Models.HueSetupOptions.MaxAttempts)) * 100;
+				$('#setupPanel').children('.progress-bar').width(percentVal + "%").attr("aria-valuenow", percentVal);
+				$('#setupPanel').children('.progress-bar sr-only').text(percentVal + "% remaining");
 				if (data.redirect) {
+					setTimeout(function () {
 					window.location.href = "@Url.Action("Index")";
+					}, 1000);
 				}
 			});
 			n--;
 		}
 	});
-</script>
+	</script>
 }

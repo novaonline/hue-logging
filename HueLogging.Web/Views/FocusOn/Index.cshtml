@@ -1,44 +1,32 @@
-﻿@model IEnumerable<HueLogging.Models.LightEvent>
+﻿@model HueLogging.Models.Light
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = Model.Name;
 }
+<h2>View Details for @Model.Name</h2>
+<div class="row">
+	<div class="col-xs-12">
+		<dl>
+			<dt>Id</dt>
+			<dd>@Model.Id</dd>
+			<dt>Type</dt>
+			<dd>@Model.HueType</dd>
+			<dt>Name</dt>
+			<dd>@Model.Name</dd>
+			<dt>Model Id</dt>
+			<dd>@Model.ModelId</dd>
+			<dt>Software Version</dt>
+			<dd>@Model.SWVersion</dd>
+		</dl>
+	</div>
+</div>
 
-<h2>View Details for @Model.First().Light.Name</h2>
-<dl>
-	<dt>Id</dt>
-	<dd>@Model.First().Light.Id</dd>
-	<dt>Type</dt>
-	<dd>@Model.First().Light.HueType</dd>
-	<dt>Name</dt>
-	<dd>@Model.First().Light.Name</dd>
-	<dt>Model Id</dt>
-	<dd>@Model.First().Light.ModelId</dd>
-	<dt>Software Version</dt>
-	<dd>@Model.First().Light.SWVersion</dd>
-</dl>
+<div class="row">
+	<div class="col-lg-6">
+		@await Component.InvokeAsync("HueEvents", new { lightId = Model.Id, daysBack = ViewBag.DaysBack })
+	</div>
+	<div class="col-lg-6">
+		@await Component.InvokeAsync("HueUsage", new { lightId = Model.Id, daysBack = ViewBag.DaysBack })
+	</div>
+</div>
 
-<h3>View Events within the last @ViewBag.DaysBack day(s)</h3>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<td>Id</td>
-			<td>Date</td>
-			<td>State (Is On)</td>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@item.Id</td>
-				<td>@item.AddDate.ToLocalTime()</td>
-				@* TODO: reflect state better (use more of the state; vcomponent it *@
-				<td>@item.State.On</td> 
-			</tr>
-		}
-	</tbody>
-</table>
-@await Component.InvokeAsync("HueUsage", new { lightId = Model.First().Light.Id, daysBack = ViewBag.DaysBack })
-
- 
-@*<vc:HueUsage lightId="@Model.First().Light.Id" daysBack="@ViewBag.DaysBack"></vc:HueUsage>*@
+@*<vc:HueUsage lightId="@Model.Id" daysBack="@ViewBag.DaysBack"></vc:HueUsage>*@

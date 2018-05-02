@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HueLogging.Standard.DAL\HueLogging.Standard.DAL.csproj" />
+    <ProjectReference Include="..\HueLogging.Standard.Models\HueLogging.Standard.Models.csproj" />
+  </ItemGroup>
+
+</Project>

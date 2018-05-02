@@ -52,7 +52,7 @@ namespace HueLogging.DAL.Api
 			var config = _hueLoggingRepo.GetRecentConfig();
 			if (config == null)
 			{
-				var ip = GetBridgeIpForSetup();
+				var ip = HueSetupOptions.Dns ?? GetBridgeIpForSetup();
 				string appKey = String.Empty;
 				while (string.IsNullOrEmpty(appKey) && retries >= 0)
 				{

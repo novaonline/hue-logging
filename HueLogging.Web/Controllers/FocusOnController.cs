@@ -1,30 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HueLogging.Standard.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HueLogging.Models.Interfaces;
+using System;
 
 namespace HueLogging.Web.Controllers
 {
 	public class FocusOnController : Controller
 	{
-		ILoggingManager _logger;
+		IHueLoggingManager _hueLoggingManager;
 		IHueLoggingRepo _hueLoggingRepo;
+		ILogger _logger;
 
-		public FocusOnController(ILoggingManager logger, IHueLoggingRepo hueLoggingRepo)
+
+		public FocusOnController(IHueLoggingManager hueLogger, IHueLoggingRepo hueLoggingRepo, ILogger<FocusOnController> logger)
 		{
-			_logger = logger;
+			_hueLoggingManager = hueLogger;
 			_hueLoggingRepo = hueLoggingRepo;
+			_logger = logger;
 		}
 
 		public IActionResult Index(string lightName, int daysBack = 30)
 		{
-			var lightId = _hueLoggingRepo.GetLightByName(lightName)?.Id;
-			ViewBag.DaysBack = daysBack;
-			var events = _hueLoggingRepo.GetRecentEvents(lightId, TimeSpan.FromDays(daysBack));
-			return View(events);
+			try
+			{
+				var light = _hueLoggingRepo.GetLightByName(lightName);
+				if (light == null) return NotFound();
+				ViewBag.DaysBack = daysBack;
+				return View(light);
+			} catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error while attempting to fetch light details");
+				return StatusCode((int)System.Net.HttpStatusCode.InternalServerError);
+			}
+			
 		}
 	}
 }
