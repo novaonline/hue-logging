@@ -33,3 +33,11 @@
         display: none;
     }
 }
+
+.hidden-at-start {
+	display: none;
+}
+
+.cards .thumbnail {
+	min-height: 525px;
+}

@@ -137,6 +137,7 @@ namespace HueLogging.DAL.Repository
 		public IEnumerable<HueSessionSummary> GetHueSessionSummary(DateTime startDate, DateTime endDate)
 		{
 			return (from s in GetHueSessions(startDate, endDate)
+					where s.EndDate.HasValue
 					orderby s.StartDate ascending
 					group s by s.Light into g
 					select new HueSessionSummary

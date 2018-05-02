@@ -1,0 +1,21 @@
+﻿@model HueLightDetailsCardViewModel
+
+@foreach (var light in Model.Lights)
+{
+	<div class="@Model.BootstrapColumnClasses">
+		<div class="thumbnail">
+			<img data-src="holder.js/300x200?random=yes&text=@(light.Name)" alt="...">
+			<div class="caption">
+				<h3>@light.Name</h3>
+				<p>
+					@* TODO comeup with a helper class to normalize names 
+						@(light.Name.ToLower().EndsWith("light") ? "" : "light" ) *@
+					Check out recent activies for "@light.Name" 
+				</p>
+				<p>
+					<a href="/focuson?lightName=@light.Name" class="btn btn-primary" role="button">View</a>
+				</p>
+			</div>
+		</div>
+	</div>
+}

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<HueLogging.Models.LightEvent>
+
+<h3>View Events within the last @ViewBag.DaysBack day(s)</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>Id</td>
+			<td>Date</td>
+			<td>State (Is On)</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.AddDate.ToLocalTime()</td>
+				@* TODO: reflect state better (use more of the state; vcomponent it *@
+				<td>@item.State.On</td>
+			</tr>
+		}
+	</tbody>
+</table>

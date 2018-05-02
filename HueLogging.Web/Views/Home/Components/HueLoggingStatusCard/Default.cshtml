@@ -1,0 +1,37 @@
+﻿@model StatusCardViewModel
+@if (Model.Status == HueLoggingStatus.RUNNING)
+{
+	<div class="@Model.BootstrapColumnClasses">
+		<div class="thumbnail">
+			<img data-src="holder.js/300x200?theme=lava&text=Stop" alt="...">
+			<div class="caption">
+				<h3>Stopping Hue Logs</h3>
+				<p>
+					Stopping the Hue Logging process stops any jobs related to logging Hue activities.
+				</p>
+				<p>
+					<a href="/stop" class="btn btn-danger" role="button">Stop</a>
+				</p>
+			</div>
+		</div>
+	Model</div>
+
+}
+else
+{
+	<div class="@Model.BootstrapColumnClasses">
+		<div class="thumbnail">
+			<img data-src="holder.js/300x200?theme=vine&text=Start" alt="...">
+			<div class="caption">
+				<h3>Starting Hue Logs</h3>
+				<p>
+					Hue Logging is currently <b>not running</b>. Start the Hue Logging background process to get light activity
+				</p>
+				<p>
+					<a href="/start" class="btn btn-success" role="button">Start</a>
+				</p>
+			</div>
+		</div>
+	</div>
+
+}

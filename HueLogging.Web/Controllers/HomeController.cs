@@ -1,66 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Hangfire;
+using Hangfire.Storage;
+using HueLogging.Standard.Models.Interfaces;
+using HueLogging.Web.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using HueLogging.Web.Models;
-using Hangfire;
-using HueLogging.Models.Interfaces;
-using Hangfire.Storage;
 
 namespace HueLogging.Web.Controllers
 {
 	public class HomeController : Controller
 	{
-		ILoggingManager _loggingManager;
+		public static readonly string JOBID = "HueLoggingJobId";
+		IHueLoggingManager _loggingManager;
 		IHueLoggingRepo _hueLoggingRepo;
+		ILogger _logger;
 
-		public HomeController(ILoggingManager loggingManager, IHueLoggingRepo hueLoggingRepo)
+		public HomeController(IHueLoggingManager loggingManager, IHueLoggingRepo hueLoggingRepo, ILogger<HomeController> logger)
 		{
 			_hueLoggingRepo = hueLoggingRepo;
 			_loggingManager = loggingManager;
+			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public IActionResult Index(int daysBack = 30)
 		{
+			ViewBag.DaysBack = daysBack;
+			ViewBag.Newbie = _hueLoggingRepo.GetRecentConfig() == null ? true : false;
 			return View();
 		}
 
 		[HttpPost]
 		public IActionResult GetSummary(int daysBack = 30)
 		{
-			var end = DateTime.UtcNow;
-			var start = end.AddDays(-1 * daysBack);
-			var m = _hueLoggingRepo.GetHueSessionSummary(start, end);
-			return Json(new
+			try
 			{
-				datasets = new[] { new { data = m.Select(x => (int)Math.Round(x.TotalDuration.TotalMinutes)) } },
-				labels = m.Select(x => x.Light.Name)
-			});
+				var end = DateTime.UtcNow;
+				var start = end.AddDays(-1 * daysBack);
+				var m = _hueLoggingRepo.GetHueSessionSummary(start, end);
+				return Json(new
+				{
+					datasets = new[] { new { data = m.Select(x => (int)Math.Round(x.TotalDuration.TotalMinutes)) } },
+					labels = m.Select(x => x.Light.Name)
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogWarning(ex, "Unable to Get Summary");
+				return StatusCode((int)System.Net.HttpStatusCode.InternalServerError);
+			}
 		}
 
 		[Route("/start")]
 		public IActionResult Start()
 		{
-			RecurringJob.AddOrUpdate("HueLoggingJobId", () => Begin(), Cron.Minutely, TimeZoneInfo.Utc);
-			return View();
+			RecurringJob.AddOrUpdate(JOBID, () => GetLastJobAndBegin(), Cron.Minutely, TimeZoneInfo.Utc);
+			return View("SimpleMessage", new SimpleMessageViewModel
+			{
+				Message = "Hue Logging Starting",
+				Title = "Hue Log Activation"
+			});
 		}
 
 		[Route("/stop")]
 		public IActionResult Stop()
 		{
 			// TODO: when gracefully shutting down, or on error, make session enddate utcnow
-			RecurringJob.RemoveIfExists("HueLoggingJobId");
-			return View();
+			RecurringJob.RemoveIfExists(JOBID);
+			return View("SimpleMessage", new SimpleMessageViewModel
+			{
+				Message = "Hue Logging Stopping",
+				Title = "Hue Log Deactivation"
+			});
 		}
 
-		public void Begin()
+		public void GetLastJobAndBegin()
 		{
 			var shouldStartNewSession = true;
 			using (var connection = JobStorage.Current.GetConnection())
 			{
-				var recurringJob = connection.GetRecurringJobs().FirstOrDefault(p => p.Id == "HueLoggingJobId");
+				var recurringJob = connection.GetRecurringJobs().FirstOrDefault(p => p.Id == JOBID);
 
 				if (recurringJob != null && recurringJob.LastExecution.HasValue)
 				{
