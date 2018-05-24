@@ -23,6 +23,8 @@ namespace HueLogging.Standard.Models.Interfaces
 
 		Light GetLightByName(string lightName);
 
+		IEnumerable<Light> GetLights();
+
 		/// <summary>
 		/// Get the number of events
 		/// </summary>
