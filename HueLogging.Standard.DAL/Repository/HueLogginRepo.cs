@@ -160,5 +160,11 @@ namespace HueLogging.Standard.DAL.Repository
 					orderby x.Id descending
 					select x).FirstOrDefault()?.Light;
 		}
+
+		public IEnumerable<Light> GetLights()
+		{
+			return (from x in _context.LightEvent.Include(y => y.Light)
+					group x by x.Light into g select g.Key);
+		}
 	}
 }

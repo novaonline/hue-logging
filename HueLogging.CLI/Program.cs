@@ -20,8 +20,6 @@ namespace HueLogging.CLI
 
 		private static void ConfigureServices(IServiceCollection serviceCollection)
 		{
-			// TODO: Logging
-
 			var configuration = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json", false)
 				.AddJsonFile("appsettings.Development.json", true)

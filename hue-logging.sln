@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Web", "HueLogging.Web\HueLogging.Web.csproj", "{05114E71-C20F-45D7-A85F-3C3F3A6C304E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.CLI", "HueLogging.CLI\HueLogging.CLI.csproj", "{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{54695E0A-2158-4C74-BC97-D4CF8A01693E}"
@@ -17,16 +15,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Standard.DAL", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Standard.Library", "HueLogging.Standard.Core\HueLogging.Standard.Library.csproj", "{7F4E00DA-B0EB-4371-90A0-25CFDD316440}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Api", "HueLogging.Api\HueLogging.Api.csproj", "{202ACD48-99E4-4F95-A0E9-EDB93320EA36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{05114E71-C20F-45D7-A85F-3C3F3A6C304E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05114E71-C20F-45D7-A85F-3C3F3A6C304E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05114E71-C20F-45D7-A85F-3C3F3A6C304E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05114E71-C20F-45D7-A85F-3C3F3A6C304E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{7F4E00DA-B0EB-4371-90A0-25CFDD316440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4E00DA-B0EB-4371-90A0-25CFDD316440}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4E00DA-B0EB-4371-90A0-25CFDD316440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202ACD48-99E4-4F95-A0E9-EDB93320EA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202ACD48-99E4-4F95-A0E9-EDB93320EA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202ACD48-99E4-4F95-A0E9-EDB93320EA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202ACD48-99E4-4F95-A0E9-EDB93320EA36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
