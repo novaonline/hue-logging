@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,16 +11,15 @@ using Microsoft.Extensions.Logging;
 
 namespace HueLogging.Api
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var host = WebHost.CreateDefaultBuilder(args)
+				.UseStartup<Startup>()
+				.Build();
+			host.Run();
+		}
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
-    }
+	}
 }
