@@ -1,5 +1,6 @@
 ﻿using HueLogging.Standard.Library.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,25 +14,43 @@ namespace HueLogging.CLI
 	{
 		static void Main(string[] args)
 		{
-			var shouldReset = false;
-			if (args.Length > 0) bool.TryParse(args[0], out shouldReset);
 			var services = new ServiceCollection();
 			ConfigureServices(services);
 			var serviceProvider = services.BuildServiceProvider();
-			serviceProvider.GetService<App>().Run(shouldReset);
+
+			var cliApp = new CommandLineApplication
+			{
+				Name = "hue-log"
+			};
+			cliApp.HelpOption("-?|-h|--help");
+
+			cliApp.Command("setup", (command) =>
+			{
+				command.Description = "Setup hue logging's api key";
+				command.HelpOption("-?|-h|--help");
+				command.OnExecute(() =>
+				{
+					serviceProvider.GetService<App>().Setup();
+					return 0;
+				});
+			});
+			cliApp.Execute(args);
+			//serviceProvider.GetService<App>().Run(shouldReset);
 		}
 
 		private static void ConfigureServices(IServiceCollection serviceCollection)
 		{
-			var configuration = new ConfigurationBuilder()
+			IConfiguration configuration = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json", false)
 				.AddJsonFile("appsettings.Development.json", true)
 				.Build();
+
+			serviceCollection.AddSingleton<IConfiguration>(configuration);
+
 			serviceCollection.AddSingleton(new LoggerFactory()
 				.AddConsole());
 			serviceCollection.AddLogging();
 			serviceCollection.AddHueLogging(options => options.UseSqlServer(configuration.GetConnectionString("HueLoggingConnection")));
-
 			serviceCollection.AddTransient<App>();
 		}
 	}

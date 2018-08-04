@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /HueLogging.CLI/Properties/PublishProfiles/FolderProfile.pubxml
 /HueLogging.Web/Properties/PublishProfiles/FolderProfile.pubxml
+/HueLogging.ServiceV2/Properties/launchSettings.json

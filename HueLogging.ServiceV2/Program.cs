@@ -35,14 +35,7 @@ namespace HueLogging.ServiceV2
 					services.AddLogging();
 					services.AddHostedService<LifetimeEventsHostedService>();
 					services.AddHostedService<HueLoggingRecurringService>();
-					if(hostContext.HostingEnvironment.IsDevelopment())
-					{
-						services.AddHueLogging(options => options.UseInMemoryDatabase("HueLoggingConnection"));
-					}
-					else
-					{
-						services.AddHueLogging(options => options.UseSqlServer(hostContext.Configuration.GetConnectionString("HueLoggingConnection")));
-					}
+					services.AddHueLogging(options => options.UseSqlServer(hostContext.Configuration.GetConnectionString("HueLoggingConnection")));
 				})
 				.ConfigureLogging((hostContext, configLogging) =>
 				{

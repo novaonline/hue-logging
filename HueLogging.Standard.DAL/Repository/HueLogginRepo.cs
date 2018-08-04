@@ -1,6 +1,7 @@
 ﻿using HueLogging.Standard.Models;
 using HueLogging.Standard.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,14 @@ namespace HueLogging.Standard.DAL.Repository
 		private ILogger<HueLogginRepo> logger;
 		private bool disposed = false;
 
-		public HueLogginRepo(HueLoggingContext context, ILogger<HueLogginRepo> logger)
+		public HueLogginRepo(HueLoggingContext context, ILogger<HueLogginRepo> logger, IConfiguration configuration)
 		{
 			_context = context;
 			this.logger = logger;
+
+			// Seed
+			var apikey = configuration["Hue:ApiKey"];
+			DbInitializer.Seed(context, apikey);
 		}
 
 		public HueConfigStates GetRecentConfig()

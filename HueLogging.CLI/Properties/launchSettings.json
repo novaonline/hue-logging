@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HueLogging.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "setup"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 ﻿using HueLogging.Standard.Models;
 using HueLogging.Standard.Models.Interfaces;
+using Microsoft.Extensions.Logging;
 using Q42.HueApi;
 using Q42.HueApi.Interfaces;
 using System;
@@ -18,10 +19,12 @@ namespace HueLogging.Standard.DAL.Api
 
 		IBridgeLocator _locator;
 		ILocalHueClient _client;
-		IHueLoggingRepo _hueLoggingRepo;
+		readonly IHueLoggingRepo _hueLoggingRepo;
+		readonly ILogger<Q42HueAccess> _logger;
 
-		public Q42HueAccess(IHueLoggingRepo hueLoggingRepo)
+		public Q42HueAccess(IHueLoggingRepo hueLoggingRepo, ILogger<Q42HueAccess> logger)
 		{
+			_logger = logger;
 			_locator = new HttpBridgeLocator();
 			_hueLoggingRepo = hueLoggingRepo;
 			hueConfig = hueLoggingRepo.GetRecentConfig();
@@ -50,6 +53,7 @@ namespace HueLogging.Standard.DAL.Api
 
 		public void Setup()
 		{
+			_logger.LogInformation("Please click on the hue button.");
 			int retries = HueSetupOptions.MaxAttempts;
 			if (hueConfig == null)
 			{
@@ -66,14 +70,17 @@ namespace HueLogging.Standard.DAL.Api
 					catch (Exception ex)
 					{
 						retries--;
+						_logger.LogInformation($"Waiting... patience level down to {retries}");
 					}
 
 				}
+
 				hueConfig = PersistConfig(new HueConfigStates
 				{
 					IpAddress = ip,
 					Key = appKey
 				});
+				_logger.LogInformation($"Saved API Key: {hueConfig.Key}");
 			}
 			_client = new LocalHueClient(hueConfig.IpAddress, hueConfig.Key);
 		}
