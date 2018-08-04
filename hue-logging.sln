@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.CLI", "HueLoggin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{54695E0A-2158-4C74-BC97-D4CF8A01693E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HueLogging.Service", "HueLogging.Service\HueLogging.Service.csproj", "{3917BB41-60D7-44E1-A0FF-E1DAC96FC346}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Standard.Models", "HueLogging.Standard.Models\HueLogging.Standard.Models.csproj", "{A07023B2-7BB8-4ECE-887C-05B8BCD5B07C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Standard.DAL", "HueLogging.Standard.DAL\HueLogging.Standard.DAL.csproj", "{A0BC2850-8AA5-42F2-BD4F-E65663800E9B}"
@@ -21,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{AC27E278-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.CoreTests", "HueLogging.CoreTests\HueLogging.CoreTests.csproj", "{D1E26A5F-D1CE-4743-B778-A4AE808AAEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HueLogging.ServiceV2", "HueLogging.ServiceV2\HueLogging.ServiceV2.csproj", "{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.ServiceV2", "HueLogging.ServiceV2\HueLogging.ServiceV2.csproj", "{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +31,6 @@ Global
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66CE2C16-7FF9-47EA-8ED3-AC7F22F66A2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3917BB41-60D7-44E1-A0FF-E1DAC96FC346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3917BB41-60D7-44E1-A0FF-E1DAC96FC346}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3917BB41-60D7-44E1-A0FF-E1DAC96FC346}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3917BB41-60D7-44E1-A0FF-E1DAC96FC346}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A07023B2-7BB8-4ECE-887C-05B8BCD5B07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A07023B2-7BB8-4ECE-887C-05B8BCD5B07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A07023B2-7BB8-4ECE-887C-05B8BCD5B07C}.Release|Any CPU.ActiveCfg = Release|Any CPU

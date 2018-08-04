@@ -8,12 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace HueLogging.Service
 {
 	public class Job : IJob
 	{
-		private IHueLoggingManager hueLoggingManager;
-
 		private static int counter;
 
 
@@ -21,7 +20,7 @@ namespace HueLogging.Service
 		{
 		}
 
-		public void Execute(IJobExecutionContext context)
+		public async Task Execute(IJobExecutionContext context)
 		{
 			try
 			{
