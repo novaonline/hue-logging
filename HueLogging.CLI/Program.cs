@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace HueLogging.CLI
 {
+	/// <summary>
+	/// This will be redone to aid the setup process. In particular, getting the API key from Hue bridge
+	/// </summary>
 	public class Program
 	{
 		static void Main(string[] args)

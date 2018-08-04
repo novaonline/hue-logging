@@ -11,6 +11,11 @@ namespace HueLogging.Standard.DAL.Repository
 		{
 			context.Database.Migrate();
 
+			// todo: seed the api key if the information is availalble from the root.
+			// might not actually need this.
+			// need to look at sql server in container solution
+		
+
 		}
     }
 }
