@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.CoreTests", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.ServiceV2", "src\HueLogging.ServiceV2\HueLogging.ServiceV2.csproj", "{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HueLogging.Standard.Sink.Kafka", "HueLogging.Standard.Sink.Kafka\HueLogging.Standard.Sink.Kafka.csproj", "{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HueLogging.Standard.Writer.Kafka", "src\core\HueLogging.Standard.Writer.Kafka\HueLogging.Standard.Writer.Kafka.csproj", "{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +57,10 @@ Global
 		{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41F1D88C-4C68-4762-87CB-BFE3B9A0F9C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,7 +70,7 @@ Global
 		{A0BC2850-8AA5-42F2-BD4F-E65663800E9B} = {54695E0A-2158-4C74-BC97-D4CF8A01693E}
 		{7F4E00DA-B0EB-4371-90A0-25CFDD316440} = {54695E0A-2158-4C74-BC97-D4CF8A01693E}
 		{D1E26A5F-D1CE-4743-B778-A4AE808AAEFE} = {AC27E278-F58D-4ABD-B75D-86BC561BFD8C}
-		{2AEED8F7-FCE9-45EC-8F60-DEA6966BDF3D} = {54695E0A-2158-4C74-BC97-D4CF8A01693E}
+		{E92A35EA-70EF-4350-8E00-E5C2B7CEAF76} = {54695E0A-2158-4C74-BC97-D4CF8A01693E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DC1A0D-367C-4DFA-80B1-0E9ADEAB0440}

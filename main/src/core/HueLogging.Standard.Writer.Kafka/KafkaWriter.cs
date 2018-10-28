@@ -4,10 +4,11 @@ using HueLogging.Standard.Models.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HueLogging.Standard.Writer.Kafka
+namespace HueLogging.Standard.Sink.Kafka
 {
 	public class KafkaWriter : IHueLoggingWriter
 	{
@@ -42,7 +43,7 @@ namespace HueLogging.Standard.Writer.Kafka
 
 		public async Task Save(IEnumerable<LightEvent> lightEvent)
 		{
-			foreach(var l in lightEvent)
+			foreach (var l in lightEvent)
 			{
 				await Save(l);
 			}
