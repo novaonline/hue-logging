@@ -1,8 +1,9 @@
-﻿using HueLogging.Standard.Library.Extensions;
-using Microsoft.Extensions.CommandLineUtils;
+﻿using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace HueLogging.CLI
 {
@@ -29,8 +30,17 @@ namespace HueLogging.CLI
 				command.HelpOption("-?|-h|--help");
 				command.OnExecute(() =>
 				{
-					serviceProvider.GetService<App>().Setup();
-					return 0;
+					try
+					{
+						Task.WaitAll(serviceProvider.GetService<App>().Setup());
+						return 0;
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine(ex.Message);
+						return -1;
+					}
+
 				});
 			});
 			cliApp.Execute(args);
@@ -38,17 +48,13 @@ namespace HueLogging.CLI
 
 		private static void ConfigureServices(IServiceCollection serviceCollection)
 		{
+
 			IConfiguration configuration = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json", false)
-				.AddJsonFile("appsettings.Development.json", true)
 				.Build();
 
-			serviceCollection.AddSingleton<IConfiguration>(configuration);
-
-			serviceCollection.AddSingleton(new LoggerFactory()
-				.AddConsole());
-			serviceCollection.AddLogging();
-			// TODO: serviceCollection.AddHueLogging(options => options.UseSqlServer(configuration.GetConnectionString("HueLoggingConnection")));
+			serviceCollection.AddSingleton(configuration);
+			serviceCollection.AddLogging(c => c.AddConsole());
 			serviceCollection.AddTransient<App>();
 		}
 	}

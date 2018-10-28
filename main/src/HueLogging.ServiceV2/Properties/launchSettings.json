@@ -3,9 +3,8 @@
     "HueLogging.ServiceV2": {
       "commandName": "Project",
       "environmentVariables": {
-        "HueLogging_HueLogging:ApiKey": "qzdvVe96bUxx9rgPCdyOigpZHoqBHKfTSyXFNJa9",
-        "Key": "Value",
-        "HueLogging_Kafka:BootstrapServers": "emmanuel-linux:32768"
+        "HueLogging:Kafka:BootstrapServers": "emmanuel-linux:32768",
+        "HueLogging:ApiKey": "qzdvVe96bUxx9rgPCdyOigpZHoqBHKfTSyXFNJa9"
       }
     }
   }

@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HueLogging.ServiceV2
 {
-    public class LifetimeEventsHostedService : IHostedService
+	public class LifetimeEventsHostedService : IHostedService
 	{
 		private readonly ILogger _logger;
 		private readonly IApplicationLifetime _appLifetime;
@@ -36,21 +33,21 @@ namespace HueLogging.ServiceV2
 
 		private void OnStarted()
 		{
-			_logger.LogInformation("OnStarted has been called.");
+			_logger.LogInformation("Starting Service");
 
 			// Perform post-startup activities here
 		}
 
 		private void OnStopping()
 		{
-			_logger.LogInformation("OnStopping has been called.");
+			_logger.LogInformation("Stopping Service");
 
 			// Perform on-stopping activities here
 		}
 
 		private void OnStopped()
 		{
-			_logger.LogInformation("OnStopped has been called.");
+			_logger.LogInformation("Good bye.");
 
 			// Perform post-stopped activities here
 		}

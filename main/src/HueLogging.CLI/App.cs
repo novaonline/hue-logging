@@ -1,5 +1,6 @@
 ﻿using HueLogging.CLI.Models;
 using HueLogging.Standard.Models.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,10 +12,12 @@ namespace HueLogging.CLI
 	public class App
 	{
 		private readonly IHueAccess hueAccess;
+		private readonly ILogger<App> logger;
 
-		public App(IHueAccess hueAccess)
+		public App(IHueAccess hueAccess, ILogger<App> logger)
 		{
 			this.hueAccess = hueAccess;
+			this.logger = logger;
 		}
 
 		public async Task Setup()
@@ -22,16 +25,11 @@ namespace HueLogging.CLI
 			Console.Write("This setup requires an API key. Let's get access to the hue bridge button. Are you ready to setup? (y/n): ");
 			if (Console.ReadLine().Equals("y"))
 			{
-				var setup = await hueAccess.Setup();
-				using (StreamReader r = new StreamReader("file.json"))
-				{
-					string json = r.ReadToEnd();
-					DynamicConfiguration items = JsonConvert.DeserializeObject<DynamicConfiguration>(json);
-
-					var txt = JsonConvert.SerializeObject(items);
-					File.WriteAllText("file.json",txt);
-				}
-				//JObject
+				var (IpAddress, Key) = await hueAccess.Setup();
+				File.WriteAllText("hue-key.json", Key);
+				logger.LogInformation($"Please set environment variable 'HueLogging:ApiKey={Key}' ");
+				logger.LogInformation("Your key has been written to hue-key.json in current directory.");
+				logger.LogWarning("You'll also need to setup enivronment variable 'HueLogging:Kafka:BootstrapServers'");
 			}
 			else
 			{
