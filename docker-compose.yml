@@ -1,0 +1,27 @@
+version: '3'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${hostip}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  polling-service:
+    build:
+      context: ./main/src
+      dockerfile: HueLogging.ServiceV2/.Dockerfile
+    environment:
+        HueLogging:Kafka:BootstrapServers: "kafka:9092"
+    links:
+      - "kafka"
+    env_file:
+      - .env
+    depends_on:
+      - kafka
