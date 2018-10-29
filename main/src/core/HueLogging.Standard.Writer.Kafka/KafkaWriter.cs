@@ -20,7 +20,9 @@ namespace HueLogging.Standard.Sink.Kafka
 			_logger = logger;
 			_producerConfig = new ProducerConfig
 			{
-				BootstrapServers = configuration["Kafka:BootstrapServers"]
+				
+				BootstrapServers = configuration["HueLogging:Kafka:BootstrapServers"],
+				
 			};
 		}
 
