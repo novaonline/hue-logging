@@ -4,4 +4,4 @@
 
 /main/src/HueLogging.ServiceV2/Properties/launchSettings.json
 
-*.env
+.env

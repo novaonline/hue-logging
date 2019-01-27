@@ -18,19 +18,19 @@
 
 package com.github.novaonline
 
+import java.time.OffsetDateTime
 import java.util.Properties
 
 import com.github.novaonline.cassandra.HueLoggingLocalCluster
-import com.github.novaonline.map.JsonToLightEvent
 import com.github.novaonline.model.light._
+import com.github.novaonline.serialization.SimpleJsonSchema
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.connectors.cassandra.CassandraSink
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010
-import org.apache.flink.streaming.util.serialization.JSONKeyValueDeserializationSchema
+import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer010, FlinkKafkaProducer010}
 import org.slf4j.LoggerFactory
 
 
@@ -50,32 +50,39 @@ object LightEvents {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
 
+    val lightEventSchema = new SimpleJsonSchema[LightEvent]
+    val lightSessionSchema = new SimpleJsonSchema[LightSession]
+    val lightAccumlatedSchema = new SimpleJsonSchema[LightAccumulated]
+
     val properties = new Properties()
     properties.setProperty("bootstrap.servers", s"$kafkaHost:9092")
     properties.setProperty("group.id", "Hue-Logging")
-    val lightEventSource = new FlinkKafkaConsumer010("hue-logging-light-event", new JSONKeyValueDeserializationSchema(false), properties)
+    val lightEventSource = new FlinkKafkaConsumer010("hue-logging-light-event", lightEventSchema, properties)
     lightEventSource.setStartFromEarliest()
 
     val cassandraCluster = new HueLoggingLocalCluster(cassandraHost)
 
     // Start Map Reduce
-    val lightEventJsonStream = env.addSource(lightEventSource)
-    val lightEventStream = lightEventJsonStream.map(JsonToLightEvent)
+    val lightEventStream = env.addSource(lightEventSource).map(x => {
+      // enrich anything else missed from serializing
+      x.copy(state = x.state.copy(addDate = OffsetDateTime.parse(x.addDate).toEpochSecond))
+    })
 
     val watermarkedLightEventsStream = lightEventStream.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor[LightEvent](Time.seconds(10)) {
-      override def extractTimestamp(t: LightEvent): Long = t.state.addDate
+      override def extractTimestamp(t: LightEvent): Long = OffsetDateTime.parse(t.addDate).toEpochSecond
     })
 
     val lightSessionsStream = watermarkedLightEventsStream
       .keyBy(x => x.light.id)
-      .flatMapWithState[LightSession, LightState]((light: LightEvent, state: Option[LightState]) => {
-      if (state.isEmpty && light.state.on) {
+      .flatMapWithState[LightSession, LightState]((light: LightEvent, prevState: Option[LightState]) => {
+       val currState = light.state
+      if (prevState.isEmpty && currState.on) {
         LOG.info("Opened Light Session")
-        (Iterator(LightSession(light.light, light.state, None, 0)), Some(light.state))
-      } else if (state.isDefined && state.get.on && !light.state.on) {
+        (Iterator(LightSession(light.light, currState, None, 0)), Some(currState))
+      } else if (prevState.isDefined && prevState.get.on && !currState.on) {
         LOG.info("Closed Light Session")
-        val duration = light.state.addDate - state.get.addDate
-        (Iterator(LightSession(light.light, light.state, Some(light.state), duration)), None)
+        val duration = currState.addDate - prevState.get.addDate
+        (Iterator(LightSession(light.light, currState, Some(currState), duration)), None)
       } else {
         //LOG.info("Unknown State for Light Session")
         (Iterator.empty, None)
@@ -89,8 +96,17 @@ object LightEvents {
       .map(x => LightAccumulated(x.light, x.durationSeconds))
 
 
+    // Publish Processed Streams to Kafka
+    val kafkaLightSessionProducer = new FlinkKafkaProducer010("hue-logging-light-session", lightSessionSchema, properties)
+
+    val kafkaLightAccumulatedProducer = new FlinkKafkaProducer010("hue-logging-light-accumulated", lightAccumlatedSchema, properties)
+
+    lightSessionsStream.addSink(kafkaLightSessionProducer)
+    lightAccumulated.addSink(kafkaLightAccumulatedProducer)
+
+
     CassandraSink.addSink(lightEventStream.map(x => {
-      val r = x.toCassandraTuple()
+      val r = x.toCassandraTuple
       LOG.info(s"mapped light event stream ${r.toString()}")
       r
     }))

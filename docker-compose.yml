@@ -9,7 +9,7 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: ${HueLogging:MachineHostIp}
+      KAFKA_ADVERTISED_HOST_NAME: ${ADVERTISED_HOST_NAME}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -19,9 +19,9 @@ services:
       - "9042:9042"
       - "7000:7000"
     environment:
-      CASSANDRA_BROADCAST_ADDRESS: ${HueLogging:MachineHostIp}
+      CASSANDRA_BROADCAST_ADDRESS: ${ADVERTISED_HOST_NAME}
     volumes:
-      - ${HueLogging:CassandraVolumePath}:/var/lib/cassandra
+      - ${HueLogging_CassandraVolumePath}:/var/lib/cassandra
   polling-service:
     build:
       context: ./main/src
