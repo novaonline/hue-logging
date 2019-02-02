@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace HueLogging.Standard.Sink.Kafka
 {
-	public class KafkaWriter : IHueLoggingWriter
+	public class LightEventKafkaSink : IHueLoggingSink<LightEvent>
 	{
-		private readonly ILogger<KafkaWriter> _logger;
+		private readonly ILogger<LightEventKafkaSink> _logger;
 		private readonly ProducerConfig _producerConfig;
 
-		public KafkaWriter(IConfiguration configuration, ILogger<KafkaWriter> logger)
+		public LightEventKafkaSink(IConfiguration configuration, ILogger<LightEventKafkaSink> logger)
 		{
 			_logger = logger;
 			_producerConfig = new ProducerConfig
 			{
-				
+
 				BootstrapServers = configuration["HueLogging:Kafka:BootstrapServers"],
-				
+
 			};
 		}
 

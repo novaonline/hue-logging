@@ -15,11 +15,8 @@ namespace HueLogging.Standard.DAL.Api
 	{
 		private const string APP_NAME = "HUE_LOGGING";
 		private const string DEVICE_NAME = "DEVICE_NAME";
-
-
-		IBridgeLocator _locator;
+		readonly IBridgeLocator _locator;
 		ILocalHueClient _client;
-		readonly IConfiguration _hueLoggingConfig;
 		readonly ILogger<Q42HueAccess> _logger;
 
 		readonly string ipAddress;
@@ -29,7 +26,6 @@ namespace HueLogging.Standard.DAL.Api
 		{
 			_logger = logger;
 			_locator = new HttpBridgeLocator();
-			_hueLoggingConfig = hueLoggingConfig;
 			ipAddress = hueLoggingConfig["HueLogging:IpAddress"];
 			key = hueLoggingConfig["HueLogging:ApiKey"];
 		}
@@ -97,7 +93,7 @@ namespace HueLogging.Standard.DAL.Api
 			// TODO verify if this is UTC time or not
 			var whitelists = await _client.GetWhiteListAsync();
 			return whitelists.Where(x => x.Name != $"{APP_NAME}#{DEVICE_NAME}")
-					.Any(x => DateTimeOffset.Parse(x.LastUsedDate) >= dateTime);
+					.Any(x => x.LastUsedDate.HasValue && x.LastUsedDate.Value >= dateTime);
 		}
 
 		private LightEvent Convert(Q42.HueApi.Light light)

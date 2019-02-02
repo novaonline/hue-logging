@@ -1,4 +1,5 @@
 ﻿using HueLogging.Standard.Library.Helpers.Comparers;
+using HueLogging.Standard.Models;
 using HueLogging.Standard.Models.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,7 +11,7 @@ namespace HueLogging.Standard.Library
 	public class HueLoggingManager : IHueLoggingManager
 	{
 		private readonly IHueLoggingStateManager _stateManager;
-		private readonly IHueLoggingWriter _writer;
+		private readonly IHueLoggingSink<LightEvent> _writer;
 		private readonly IHueAccess _hueAccess;
 		private readonly ILogger<HueLoggingManager> _logger;
 
@@ -18,7 +19,7 @@ namespace HueLogging.Standard.Library
 
 		public HueLoggingManager(ActivityComparer activityComparer,
 			IHueLoggingStateManager stateManager,
-			IHueLoggingWriter writer,
+			IHueLoggingSink<LightEvent> writer,
 			IHueAccess hueAccess,
 			ILogger<HueLoggingManager> logger)
 		{

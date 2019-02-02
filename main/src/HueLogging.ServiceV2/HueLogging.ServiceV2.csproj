@@ -6,46 +6,46 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' or '$(Configuration)|$(Platform)'=='Debug|Any CPU'">
-		<LangVersion>latest</LangVersion>
+		<LangVersion>8.0</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' or '$(Configuration)|$(Platform)'=='Release|Any CPU'">
-		<LangVersion>latest</LangVersion>
+		<LangVersion>8.0</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="**\*.json" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Remove="bin\**" />
-	  <Compile Remove="obj\**" />
-	  <Content Remove="bin\**" />
-	  <Content Remove="obj\**" />
-	  <EmbeddedResource Remove="bin\**" />
-	  <EmbeddedResource Remove="obj\**" />
-	  <None Remove="bin\**" />
-	  <None Remove="obj\**" />
+		<Compile Remove="bin\**" />
+		<Compile Remove="obj\**" />
+		<Content Remove="bin\**" />
+		<Content Remove="obj\**" />
+		<EmbeddedResource Remove="bin\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="bin\**" />
+		<None Remove="obj\**" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\core\HueLogging.Standard.Core\HueLogging.Standard.Library.csproj" />
-	  <ProjectReference Include="..\core\HueLogging.Standard.DAL\HueLogging.Standard.DAL.csproj" />
-	  <ProjectReference Include="..\core\HueLogging.Standard.Models\HueLogging.Standard.Models.csproj" />
-	  <ProjectReference Include="..\core\HueLogging.Standard.Writer.Kafka\HueLogging.Standard.Writer.Kafka.csproj" />
+		<ProjectReference Include="..\core\HueLogging.Standard.Core\HueLogging.Standard.Library.csproj" />
+		<ProjectReference Include="..\core\HueLogging.Standard.DAL\HueLogging.Standard.DAL.csproj" />
+		<ProjectReference Include="..\core\HueLogging.Standard.Models\HueLogging.Standard.Models.csproj" />
+		<ProjectReference Include="..\core\HueLogging.Standard.Writer.Kafka\HueLogging.Standard.Sink.Kafka.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Update="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+		<Content Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>

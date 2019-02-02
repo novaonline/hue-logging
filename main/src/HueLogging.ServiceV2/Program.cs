@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace HueLogging.ServiceV2
 {
 	class Program
-    {
-        static async Task Main(string[] args)
-        {
+	{
+		static async Task Main(string[] args)
+		{
 			var host = new HostBuilder()
 				.ConfigureAppConfiguration((hostContext, configApp) =>
 				{
@@ -26,7 +26,7 @@ namespace HueLogging.ServiceV2
 					services.AddHostedService<HueLoggingRecurringService>();
 
 					services.AddHueLogging();
-					services.AddHueLoggingWithKafkaSink();
+					services.AddKafkaSinkToHueLogging();
 				})
 				.ConfigureLogging((hostContext, configLogging) =>
 				{
@@ -38,5 +38,5 @@ namespace HueLogging.ServiceV2
 
 			await host.RunAsync();
 		}
-    }
+	}
 }
