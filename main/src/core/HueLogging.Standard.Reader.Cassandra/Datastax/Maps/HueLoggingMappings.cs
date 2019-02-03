@@ -8,22 +8,10 @@ namespace HueLogging.Standard.Source.Cassandra.Datastax.Maps
 	{
 		public HueLoggingMappings()
 		{
-			For<LightEvent>()
-				.Column(l => l.AddDate, cm => cm.WithName("add_date"))
-				.Column(l => l.Light, cm => cm.WithName("light"))
-				.Column(l => l.State, cm => cm.WithName("state"));
-			For<LightSession>()
-				.Column(ls => ls.AddDate, cm => cm.WithName("add_date"))
-				.Column(ls => ls.Light, cm => cm.WithName("light"))
-				.Column(ls => ls.StartState, cm => cm.WithName("state_start"))
-				.Column(ls => ls.EndState, cm => cm.WithName("start_end"))
-				.Column(ls => ls.DurationInSeconds, cm => cm.WithName("duration_in_seconds"));
-			For<LightSummary>()
-				.Column(lsum => lsum.Light, cm => cm.WithName("light"))
-				.Column(lsum => lsum.DurationInSeconds, cm => cm.WithName("duration_in_seconds"))
-				.Column(lsum => lsum.AddDate, cm => cm.WithName("add_date"));
-			For<LightKey>()
-				.Column(lk => lk.Name, cm => cm.WithName("light_name"));
+			MapLightEvent();
+			MapLightSession();
+			MapLightSummary();
+			MapLightKey();
 		}
 
 		public static UdtMap[] GetUdtMaps()
@@ -42,6 +30,38 @@ namespace HueLogging.Standard.Source.Cassandra.Datastax.Maps
 				.Map(s => s.Hue, "hue")
 				.Map(s => s.Reachable, "is_reachable")
 			};
+		}
+
+		public void MapLightEvent()
+		{
+			For<LightEvent>()
+				.Column(l => l.AddDate, cm => cm.WithName("add_date"))
+				.Column(l => l.Light, cm => cm.WithName("light"))
+				.Column(l => l.State, cm => cm.WithName("state"));
+		}
+
+		public void MapLightSession()
+		{
+			For<LightSession>()
+				.Column(ls => ls.AddDate, cm => cm.WithName("add_date"))
+				.Column(ls => ls.Light, cm => cm.WithName("light"))
+				.Column(ls => ls.StartState, cm => cm.WithName("state_start"))
+				.Column(ls => ls.EndState, cm => cm.WithName("start_end"))
+				.Column(ls => ls.DurationInSeconds, cm => cm.WithName("duration_in_seconds"));
+		}
+
+		public void MapLightSummary()
+		{
+			For<LightSummary>()
+				.Column(lsum => lsum.Light, cm => cm.WithName("light"))
+				.Column(lsum => lsum.DurationInSeconds, cm => cm.WithName("duration_in_seconds"))
+				.Column(lsum => lsum.AddDate, cm => cm.WithName("add_date"));
+		}
+
+		public void MapLightKey()
+		{
+			For<LightKey>()
+				.Column(lk => lk.Name, cm => cm.WithName("light_name"));
 		}
 	}
 }

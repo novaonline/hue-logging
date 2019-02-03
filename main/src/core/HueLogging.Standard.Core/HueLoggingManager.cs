@@ -42,12 +42,9 @@ namespace HueLogging.Standard.Library
 
 		public async Task LogEvent(bool shouldStartNewSession)
 		{
-			// loop through each light and determine which one was is different.
-			_logger.LogInformation($"Looping through each light");
 			var lights = await _hueAccess.GetLights();
 			foreach (var currentLight in lights)
 			{
-				var count = lights.Count();
 				_logger.LogInformation($"Light: {currentLight.Light.Id}");
 				var lastRecordedEvent = await _stateManager.GetLastEvent(currentLight.Light.Id);
 				if (_activityComparer.Compare(lastRecordedEvent, currentLight) != 0)

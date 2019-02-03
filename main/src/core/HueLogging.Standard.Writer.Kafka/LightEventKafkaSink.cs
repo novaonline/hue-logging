@@ -3,8 +3,6 @@ using HueLogging.Standard.Models;
 using HueLogging.Standard.Models.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,26 +12,26 @@ namespace HueLogging.Standard.Sink.Kafka
 	{
 		private readonly ILogger<LightEventKafkaSink> _logger;
 		private readonly ProducerConfig _producerConfig;
+		private readonly IBasicBinarySerializer _serializer;
+		private const string LIGHT_EVENT_TOPIC = "hue-logging-light-event";
 
-		public LightEventKafkaSink(IConfiguration configuration, ILogger<LightEventKafkaSink> logger)
+		public LightEventKafkaSink(IConfiguration configuration, ILogger<LightEventKafkaSink> logger, IBasicBinarySerializer serializer)
 		{
 			_logger = logger;
 			_producerConfig = new ProducerConfig
 			{
-
 				BootstrapServers = configuration["HueLogging:Kafka:BootstrapServers"],
-
 			};
+			_serializer = serializer;
 		}
 
 		public async Task Save(LightEvent lightEvent)
 		{
-			using (var p = new Producer<Null, string>(_producerConfig))
+			using (var p = new Producer<Null, byte[]>(_producerConfig))
 			{
 				try
 				{
-					var value = JsonConvert.SerializeObject(lightEvent);
-					var dr = await p.ProduceAsync("hue-logging-light-event", new Message<Null, string> { Value = value });
+					var dr = await p.ProduceAsync(LIGHT_EVENT_TOPIC, new Message<Null, byte[]> { Value = _serializer.To(lightEvent) });
 					_logger.LogInformation($"Delivered '{dr.Value}' to '{dr.TopicPartitionOffset}'");
 				}
 				catch (KafkaException ex)

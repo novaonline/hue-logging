@@ -31,25 +31,10 @@ namespace HueLogging.ServiceV2
 			return Task.CompletedTask;
 		}
 
-		private void OnStarted()
-		{
-			_logger.LogInformation("Starting Service");
+		private void OnStarted() => _logger.LogInformation("Starting Service");
 
-			// Perform post-startup activities here
-		}
+		private void OnStopping() => _logger.LogInformation("Stopping Service");
 
-		private void OnStopping()
-		{
-			_logger.LogInformation("Stopping Service");
-
-			// Perform on-stopping activities here
-		}
-
-		private void OnStopped()
-		{
-			_logger.LogInformation("Good bye.");
-
-			// Perform post-stopped activities here
-		}
+		private void OnStopped() => _logger.LogInformation("Good bye.");
 	}
 }
