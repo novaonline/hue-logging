@@ -32,7 +32,7 @@ namespace HueLogging.Standard.Sink.Kafka
 				try
 				{
 					var dr = await p.ProduceAsync(LIGHT_EVENT_TOPIC, new Message<Null, byte[]> { Value = _serializer.To(lightEvent) });
-					_logger.LogInformation($"Delivered '{dr.Value}' to '{dr.TopicPartitionOffset}'");
+					_logger.LogInformation($"Delivered '{dr.TopicPartitionOffset}'");
 				}
 				catch (KafkaException ex)
 				{

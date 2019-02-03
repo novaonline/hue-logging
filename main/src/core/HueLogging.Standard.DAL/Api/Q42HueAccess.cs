@@ -90,10 +90,15 @@ namespace HueLogging.Standard.DAL.Api
 
 		public async Task<bool> HasBeenActiveSince(DateTimeOffset dateTime)
 		{
-			// TODO verify if this is UTC time or not
 			var whitelists = await _client.GetWhiteListAsync();
-			return whitelists.Where(x => x.Name != $"{APP_NAME}#{DEVICE_NAME}")
-					.Any(x => x.LastUsedDate.HasValue && x.LastUsedDate.Value >= dateTime);
+			var appMeta = whitelists
+				.Where(x => x.Name != $"{APP_NAME}#{DEVICE_NAME}" && x.LastUsedDate.HasValue)
+				.OrderByDescending(x => x.LastUsedDate)
+				.ToList();
+
+			DateTime recentDate = appMeta.FirstOrDefault()?.LastUsedDate ?? DateTime.Now;
+			var r = recentDate >= dateTime.DateTime;
+			return r;
 		}
 
 		private LightEvent Convert(Q42.HueApi.Light light)
@@ -108,13 +113,14 @@ namespace HueLogging.Standard.DAL.Api
 					ModelId = light.ModelId,
 					SWVersion = light.SoftwareVersion
 				},
-				State = new Models.LightState
+				State = new LightState
 				{
 					Brightness = light.State.Brightness,
 					Hue = (short)(light.State.Hue ?? 0),
 					On = light.State.On,
 					Reachable = light.State.IsReachable ?? false,
-					Saturation = (short)(light.State.Saturation ?? 0)
+					Saturation = (short)(light.State.Saturation ?? 0),
+					AddDate = DateTimeOffset.Now
 				}
 			};
 		}

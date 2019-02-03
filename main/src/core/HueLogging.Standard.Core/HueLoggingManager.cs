@@ -35,7 +35,7 @@ namespace HueLogging.Standard.Library
 			var lastLightEvent = await _stateManager.GetLastEvent();
 			var r = lastLightEvent != null ? await _hueAccess.HasBeenActiveSince(lastLightEvent.AddDate) : true;
 			var passFail = r ? "Passed" : "Failed";
-			_logger.LogInformation($"Precondition {passFail}");
+			_logger.LogDebug($"Precondition {passFail}");
 			return r;
 		}
 
@@ -44,7 +44,7 @@ namespace HueLogging.Standard.Library
 			var lights = await _hueAccess.GetLights();
 			foreach (var currentLight in lights)
 			{
-				_logger.LogInformation($"Light: {currentLight.Light.Id}");
+				_logger.LogDebug($"Light: {currentLight.Light.Id}");
 				var lastRecordedEvent = await _stateManager.GetLastEvent(currentLight.Light.Id);
 				if (_activityComparer.Compare(lastRecordedEvent, currentLight) != 0)
 				{
@@ -52,7 +52,6 @@ namespace HueLogging.Standard.Library
 					currentLight.AddDate = DateTime.UtcNow;
 					await _writer.Save(currentLight);
 					await _stateManager.SaveAsLastLightEvent(currentLight);
-					_logger.LogInformation($"Wrote {currentLight.Light.Id} to writer");
 				}
 			}
 		}
