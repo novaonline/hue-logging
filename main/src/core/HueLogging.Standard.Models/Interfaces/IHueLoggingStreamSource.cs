@@ -7,7 +7,7 @@ namespace HueLogging.Standard.Models.Interfaces
 	/// The Hue Logging Streaming Source
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IHueLoggingStreamSource<T> where T : object
+	public interface IHueLoggingStreamSource<T>
 	{
 		Task Subscribe(string lightName, int limit = 100);
 	}

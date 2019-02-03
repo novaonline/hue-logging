@@ -15,8 +15,8 @@ namespace HueLogging.Standard.Source.Cassandra.Datastax.Maps
 			For<LightSession>()
 				.Column(ls => ls.AddDate, cm => cm.WithName("add_date"))
 				.Column(ls => ls.Light, cm => cm.WithName("light"))
-				.Column(ls => ls.StartState, cm => cm.WithName("state_start"))
-				.Column(ls => ls.EndState, cm => cm.WithName("start_end"))
+				//.Column(ls => ls.StartState, cm => cm.WithName("state_start"))
+				//.Column(ls => ls.EndState, cm => cm.WithName("start_end"))
 				.Column(ls => ls.DurationInSeconds, cm => cm.WithName("duration_in_seconds"));
 			For<LightSummary>()
 				.Column(lsum => lsum.Light, cm => cm.WithName("light"))
@@ -35,7 +35,7 @@ namespace HueLogging.Standard.Source.Cassandra.Datastax.Maps
 				.Map(l => l.Name, "name")
 				.Map(l => l.ModelId, "model_id")
 				.Map(l => l.SWVersion, "sw_version"),
-				UdtMap.For<State>("light_state")
+				UdtMap.For<LightState>("light_state")
 				.Map(s => s.On, "is_on")
 				.Map(s => s.Brightness, "brightness")
 				.Map(s => s.Saturation, "saturation")

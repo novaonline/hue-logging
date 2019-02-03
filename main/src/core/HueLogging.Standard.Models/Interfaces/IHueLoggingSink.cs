@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace HueLogging.Standard.Models.Interfaces
 {
 	// TODO: Splitup the config
-	public interface IHueLoggingSink<T> where T : Object
+	public interface IHueLoggingSink<T>
 	{
 		/// <summary>
 		/// Save a single light event
