@@ -8,7 +8,7 @@ namespace HueLogging.Standard.Models.Interfaces
 	/// The Hue Logging Source
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IHueLoggingSource<T> where T : object
+	public interface IHueLoggingSource<T>
 	{
 		Task<IEnumerable<T>> GetRecentByLightName(string lightName, int limit = 100);
 	}

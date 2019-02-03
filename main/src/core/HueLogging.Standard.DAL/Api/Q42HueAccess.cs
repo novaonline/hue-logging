@@ -108,7 +108,7 @@ namespace HueLogging.Standard.DAL.Api
 					ModelId = light.ModelId,
 					SWVersion = light.SoftwareVersion
 				},
-				State = new Models.State
+				State = new Models.LightState
 				{
 					Brightness = light.State.Brightness,
 					Hue = (short)(light.State.Hue ?? 0),

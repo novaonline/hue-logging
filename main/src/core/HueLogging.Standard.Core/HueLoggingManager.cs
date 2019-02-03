@@ -14,7 +14,6 @@ namespace HueLogging.Standard.Library
 		private readonly IHueLoggingSink<LightEvent> _writer;
 		private readonly IHueAccess _hueAccess;
 		private readonly ILogger<HueLoggingManager> _logger;
-
 		private readonly ActivityComparer _activityComparer;
 
 		public HueLoggingManager(ActivityComparer activityComparer,
@@ -53,7 +52,7 @@ namespace HueLogging.Standard.Library
 					currentLight.AddDate = DateTime.UtcNow;
 					await _writer.Save(currentLight);
 					await _stateManager.SaveAsLastLightEvent(currentLight);
-					_logger.LogInformation($"Wrote {currentLight.Id} to writer");
+					_logger.LogInformation($"Wrote {currentLight.Light.Id} to writer");
 				}
 			}
 		}

@@ -14,6 +14,6 @@ namespace HueLogging.Standard.Library.Helpers.Comparers
 			return CompareOnState(x.State, y.State);
 		}
 
-		private int CompareOnState(State x, State y) => x.On.CompareTo(y.On);
+		private int CompareOnState(LightState x, LightState y) => x.On.CompareTo(y.On);
 	}
 }

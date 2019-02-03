@@ -23,7 +23,7 @@ namespace HueLogging.Standard.Source.Cassandra.Datastax.Maps
 				.Map(l => l.Name, "name")
 				.Map(l => l.ModelId, "model_id")
 				.Map(l => l.SWVersion, "sw_version"),
-				UdtMap.For<State>("light_state")
+				UdtMap.For<LightState>("light_state")
 				.Map(s => s.On, "is_on")
 				.Map(s => s.Brightness, "brightness")
 				.Map(s => s.Saturation, "saturation")
