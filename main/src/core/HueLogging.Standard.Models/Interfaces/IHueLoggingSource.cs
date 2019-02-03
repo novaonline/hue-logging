@@ -10,6 +10,6 @@ namespace HueLogging.Standard.Models.Interfaces
 	/// <typeparam name="T"></typeparam>
 	public interface IHueLoggingSource<T> where T : object
 	{
-		Task<IEnumerable<T>> GetByLightName(string lightName);
+		Task<IEnumerable<T>> GetRecentByLightName(string lightName, int limit = 100);
 	}
 }

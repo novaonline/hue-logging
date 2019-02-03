@@ -8,7 +8,7 @@ namespace HueLogging.Standard.Source.Kafka
 {
 	public class LightEventKafkaStream : IHueLoggingSource<LightEvent>
 	{
-		public Task<IEnumerable<LightEvent>> GetByLightName(string lightName)
+		public Task<IEnumerable<LightEvent>> GetRecentByLightName(string lightName, int limit = 100)
 		{
 			throw new NotImplementedException();
 		}
